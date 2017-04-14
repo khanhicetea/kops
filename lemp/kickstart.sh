@@ -76,5 +76,5 @@ curl https://getcomposer.org/installer > composer-setup.php && php composer-setu
 sudo composer global require "hirak/prestissimo:^0.3"
 
 # DONE
-echo "BAMMMMM ! It's done !"
+echo "BAMMMMM ! It's done ! Remind to change MySQL root password !"
 
