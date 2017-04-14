@@ -11,12 +11,14 @@ DOMAIN="$2"
 LE_EMAIL="$3"
 DOC_ROOT=${4:-public}
 
-if [ -d "/home/$USERNAME" ]
-then
-    sudo mkdir /home/$USERNAME/$DOMAIN
-    sudo chown -R $USERNAME:www-data /home/$USERNAME/$DOMAIN
-    sudo openssl req -new -x509 -nodes -days 3650 -newkey rsa:2048 -subj "/C=US/ST=Nil/L=Nil/O=Nil/CN=$DOMAIN" -keyout /etc/nginx/ssl/$DOMAIN.key -out /etc/nginx/ssl/$DOMAIN.crt
-    cat >/tmp/new_nginx_site.conf <<EOF
+if [ ! -d "/home/$USERNAME" ]; then
+    ./create_user.sh $USERNAME
+fi
+
+sudo mkdir /home/$USERNAME/$DOMAIN
+sudo chown -R $USERNAME:www-data /home/$USERNAME/$DOMAIN
+sudo openssl req -new -x509 -nodes -days 3650 -newkey rsa:2048 -subj "/C=US/ST=Nil/L=Nil/O=Nil/CN=$DOMAIN" -keyout /etc/nginx/ssl/$DOMAIN.key -out /etc/nginx/ssl/$DOMAIN.crt
+cat >/tmp/new_nginx_site.conf <<EOF
 server {
         listen 80;
         server_name ${DOMAIN};
@@ -64,12 +66,11 @@ server {
         }
 }
 EOF
-    sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
-    sudo systemctl reload nginx.service
-    sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --domains="www.$DOMAIN" --webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' && sudo systemctl reload nginx.service
-    sudo touch /etc/cron.d/letencrypt
-    echo "0 0 1 * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --domains=www.$DOMAIN --webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee /etc/cron.d/letencrypt
-else
-    ./create_user.sh $USERNAME
-fi
+sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
+sudo systemctl reload nginx.service
+sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --domains="www.$DOMAIN" --webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' && sudo systemctl reload nginx.service
+sudo touch /etc/cron.d/letencrypt
+echo "0 0 1 * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --domains=www.$DOMAIN --webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee /etc/cron.d/letencrypt
 
+# Done
+echo -e "\nDone ! Enjoy it !"
