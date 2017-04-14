@@ -70,7 +70,7 @@ server {
 EOF
 sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
-sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' && sudo systemctl reload nginx.service
+sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf && sudo systemctl reload nginx.service
 sudo touch /etc/cron.d/letencrypt
 echo "0 0 1 * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee /etc/cron.d/letencrypt
 
