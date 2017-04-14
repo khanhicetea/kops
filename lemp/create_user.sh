@@ -3,10 +3,10 @@
 USERNAME="$1"
 
 # Create linux user
-sudo useradd -m -N -g www-data $USERNAME
+sudo useradd -m -N -g nginx $USERNAME
 
 # Create lego dir in user home
-mkdir -p /home/$USERNAME/lego/acme-challenge && sudo chown -R $USERNAME:www-data /home/$USERNAME/lego
+mkdir -p /home/$USERNAME/lego/acme-challenge && sudo chown -R $USERNAME:nginx /home/$USERNAME/lego
 
 # Composer install plugins
 sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
@@ -15,7 +15,9 @@ sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
 cat >/tmp/new_phpfpm_pool.conf <<EOF
 [${USERNAME}]
 user = ${USERNAME}
-group = www-data
+group = nginx
+listen.owner = nginx
+listen.group = nginx
 listen = /run/php/php7.1-fpm.${USERNAME}.sock
 pm = dynamic
 pm.max_children = 5
