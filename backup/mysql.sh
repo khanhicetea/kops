@@ -16,12 +16,12 @@ RM_FILENAME=$HOSTNAME.$RM_DAY.sql.gz
 
 BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema)$")
 
-echo -e "\nDump database ...."
+echo "Backup database in $TODAY ...."
 mysqldump --opt --routines --compact --force --databases ${BACKUP_DBS} | gzip > $BACKUP_DIR/$FILENAME
 
-echo -e "\nUploading to Dropbox ...."
+echo "Uploading to Dropbox ...."
 /bin/bash $CWD/dropbox_uploader.sh upload "/$BACKUP_DIR/${FILENAME}" "${FILENAME}"
 /bin/bash $CWD/dropbox_uploader.sh delete "${RM_FILENAME}"
 
-echo -e "\nCleaning ..."
+echo "Cleaning ..."
 rm -f "/$BACKUP_DIR/${FILENAME}"
