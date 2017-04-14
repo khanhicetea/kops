@@ -6,7 +6,7 @@ then
     exit 1
 fi
 
-CWD=$(dirname $(readlink $0))
+CWD=$(dirname $0)
 BACKUP_DIR="$1"
 TODAY=`date +%Y-%m-%d`
 RM_DAY=`date --date="14 days ago" +%Y-%m-%d`
@@ -16,9 +16,12 @@ RM_FILENAME=$HOSTNAME.$RM_DAY.sql.gz
 
 BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema)$")
 
+echo -e "\nDump database ...."
 mysqldump --opt --routines --compact --force --databases ${BACKUP_DBS} | gzip > $BACKUP_DIR/$FILENAME
 
+echo -e "\nUploading to Dropbox ...."
 /bin/bash $CWD/dropbox_uploader.sh upload "/$BACKUP_DIR/${FILENAME}" "${FILENAME}"
 /bin/bash $CWD/dropbox_uploader.sh delete "${RM_FILENAME}"
 
+echo -e "\nCleaning ..."
 rm -f "/$BACKUP_DIR/${FILENAME}"
