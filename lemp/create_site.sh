@@ -24,7 +24,7 @@ server {
         server_name ${DOMAIN};
 
         location ^~ /.well-known/acme-challenge/ {
-            alias /home/${USERNAME}/lego/acme-challenge/;
+            alias /usr/share/nginx/acme-challenge/;
         }
 
         return 301 https://\$server_name\$request_uri;
