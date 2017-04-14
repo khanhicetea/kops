@@ -52,7 +52,8 @@ server {
 #        }
 #    }
 EOF
-    sudo mv /tmp/new_nginx_site.conf /etc/nginx/sites-available/${DOMAIN}
+    sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
+    sudo systemctl reload nginx.service
 else
     ./create_user.sh $USERNAME
     echo -e "\nPlease add ssh key to repository before re-running this !"
