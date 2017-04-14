@@ -65,6 +65,7 @@ fastcgi_index index.php;
 include fastcgi_params;
 EOF
 sudo mv /tmp/nginx_fastcgi_snipets /etc/nginx/fastcgi_snippets
+sudo sed -i 's/fastcgi_param  SCRIPT_NAME.*/fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;/' /etc/nginx/fastcgi_params
 sudo mkdir /var/lego
 sudo mkdir /etc/nginx/ssl
 sudo mkdir /usr/share/nginx/acme-challenge
