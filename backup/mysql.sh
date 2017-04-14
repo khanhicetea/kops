@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -z "$1" ]
+then
+    echo "Please input backup dir : [backup_dir]"
+    exit 1
+fi
+
 CWD=$(dirname $(readlink $0))
 BACKUP_DIR="$1"
 TODAY=`date +%Y-%m-%d`
