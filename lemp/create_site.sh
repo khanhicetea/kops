@@ -22,12 +22,14 @@ cat >/tmp/new_nginx_site.conf <<EOF
 server {
         listen 80;
         server_name ${DOMAIN};
-
+        
         location /.well-known {
             alias /usr/share/nginx/acme-challenge/.well-known;
         }
 
-        return 301 https://\$server_name\$request_uri;
+        location / {
+            return 301 https://$server_name$request_uri;
+        }
 }
 
 server {
