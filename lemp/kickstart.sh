@@ -16,7 +16,7 @@ sudo ufw allow 443/tcp
 sudo ufw --force enable
 
 # SSH disable password authentication (make sure you configured authorized keys)
-test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo service restart ssh
+test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo service ssh restart
 
 # Upgrade system
 sudo apt update
