@@ -58,11 +58,8 @@ sudo mv /tmp/nginx_fastcgi_snipets /etc/nginx/fastcgi_snippets
 sudo mkdir /var/lego
 sudo mkdir /etc/nginx/ssl
 sudo mkdir /usr/share/nginx/acme-challenge
-sudo systemctl enable redis-server.service
-sudo systemctl restart redis-server.service
-
-# Set up cronjob to restart NGINX if /tmp/nginx.reload exists (after renewing Lets Encrypt)
-echo "0 * * * * root [ -f /tmp/nginx.reload ] && /bin/systemctl reload nginx.service && rm -f /tmp/nginx.reload" | sudo tee /etc/cron.d/reload_nginx
+sudo systemctl enable nginx.service
+sudo systemctl restart nginx.service
 
 # MariaDB 10.1
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
