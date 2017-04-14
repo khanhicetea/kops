@@ -36,8 +36,23 @@ wget -qO - https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 sudo apt update
 sudo apt install nginx -y
 sudo sed -i "s/worker_processes .*;/worker_processes auto;/" /etc/nginx/nginx.conf
-sudo sed -i "s/# multi_accept on;/multi_accept on;/" /etc/nginx/nginx.conf
-sudo sed -i "s/# gzip_/gzip_/" /etc/nginx/nginx.conf
+sudo sed -i "s/worker_connections .*;/worker_connections 1024;\\n\\tmulti_accept on;/" /etc/nginx/nginx.conf
+cat >/tmp/nginx_conf <<EOF
+tcp_nopush on;
+tcp_nodelay on;
+types_hash_max_size 2048;
+server_tokens off;
+
+gzip on;
+gzip_disable "msie6";
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 6;
+gzip_buffers 16 8k;
+gzip_http_version 1.1;
+gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+EOF
+sudo mv /tmp/nginx_conf /etc/nginx/conf.d/nginx.conf
 cat >/tmp/nginx_fastcgi_snipets <<EOF
 # regex to split \$uri to \$fastcgi_script_name and \$fastcgi_path
 fastcgi_split_path_info ^(.+\\.php)(/.+)$;
