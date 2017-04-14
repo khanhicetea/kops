@@ -6,7 +6,7 @@ USERNAME="$1"
 sudo useradd -m -N -g www-data $USERNAME
 
 # Create lego dir in user home
-mkdir /home/$USERNAME/lego && sudo chown $USERNAME:www-data /home/$USERNAME/lego
+mkdir -p /home/$USERNAME/lego/acme-challenge && sudo chown -R $USERNAME:www-data /home/$USERNAME/lego
 
 # Create user php-fpm pool
 cat >/tmp/new_phpfpm_pool.conf <<EOF
