@@ -25,6 +25,7 @@ request_terminate_timeout = 300s
 EOF
 
 sudo mv /tmp/new_phpfpm_pool.conf /etc/php/7.1/fpm/pool.d/$USERNAME.conf
+sudo rm -f /etc/php/7.1/fpm/pool.d/www.conf
 
 # Reload php-fpm service
 sudo systemctl reload php7.1-fpm.service

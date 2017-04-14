@@ -38,6 +38,8 @@ sudo apt install nginx -y
 sudo sed -i "s/worker_processes .*;/worker_processes auto;/" /etc/nginx/nginx.conf
 sudo sed -i "s/# multi_accept on;/multi_accept on;/" /etc/nginx/nginx.conf
 sudo sed -i "s/# gzip_/gzip_/" /etc/nginx/nginx.conf
+sudo systemctl enable redis-server.service
+sudo systemctl restart redis-server.service
 
 # Set up cronjob to restart NGINX if /tmp/nginx.reload exists (after renewing Lets Encrypt)
 echo "0 * * * * root [ -f /tmp/nginx.reload ] && /bin/systemctl reload nginx.service && rm -f /tmp/nginx.reload" | sudo tee /etc/cron.d/reload_nginx
@@ -50,12 +52,14 @@ export DEBIAN_FRONTEND=noninteractive
 debconf-set-selections <<< 'mariadb-server-10.1 mysql-server/root_password password passwd'
 debconf-set-selections <<< 'mariadb-server-10.1 mysql-server/root_password_again password passwd'
 sudo apt install mariadb-server mariadb-client -y
-sudo service mysql start
+sudo service mysql restart
 
 # Redis server
 sudo add-apt-repository ppa:chris-lea/redis-server -y
 sudo apt update
 sudo apt install redis-server -y
+sudo systemctl enable redis-server.service
+sudo systemctl restart redis-server.service
 
 # PHP 7.1 (via PPA)
 sudo add-apt-repository ppa:ondrej/php -y
@@ -72,6 +76,8 @@ sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.1/fpm/php.ini
 sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.1/fpm/php.ini
 sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.1/fpm/php.ini
 sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.1/fpm/php.ini
+sudo systemctl enable php7.1-fpm.service
+sudo systemctl restart php7.1-fpm.service
 curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && rm composer-setup.php
 sudo composer global require "hirak/prestissimo:^0.3"
 
