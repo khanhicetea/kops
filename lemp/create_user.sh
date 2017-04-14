@@ -5,9 +5,6 @@ USERNAME="$1"
 # Create linux user
 sudo useradd -m -N -g nginx $USERNAME
 
-# Create lego dir in user home
-mkdir -p /home/$USERNAME/lego/acme-challenge && sudo chown -R $USERNAME:nginx /home/$USERNAME/lego
-
 # Composer install plugins
 sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
 
