@@ -8,6 +8,9 @@ sudo useradd -m -N -g www-data $USERNAME
 # Create lego dir in user home
 mkdir -p /home/$USERNAME/lego/acme-challenge && sudo chown -R $USERNAME:www-data /home/$USERNAME/lego
 
+# Composer install plugins
+sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
+
 # Create user php-fpm pool
 cat >/tmp/new_phpfpm_pool.conf <<EOF
 [${USERNAME}]
