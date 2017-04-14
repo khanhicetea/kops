@@ -29,7 +29,11 @@ wget https://github.com/xenolf/lego/releases/download/v0.3.1/lego_linux_amd64.ta
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 
-# NGINX
+# NGINX (mainline branch)
+echo "deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx" | sudo tee -a /etc/apt/sources.list
+echo "deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx" | sudo tee -a /etc/apt/sources.list
+wget -qO - https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+sudo apt update
 sudo apt install nginx -y
 sudo sed -i "s/worker_processes .*;/worker_processes auto;/" /etc/nginx/nginx.conf
 sudo sed -i "s/# multi_accept on;/multi_accept on;/" /etc/nginx/nginx.conf
@@ -48,10 +52,15 @@ debconf-set-selections <<< 'mariadb-server-10.1 mysql-server/root_password_again
 sudo apt install mariadb-server mariadb-client -y
 sudo service mysql start
 
+# Redis server
+sudo add-apt-repository ppa:chris-lea/redis-server -y
+sudo apt update
+sudo apt install redis-server -y
+
 # PHP 7.1 (via PPA)
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install -y php7.1-bz2 php7.1-cli php7.1-common php7.1-curl php7.1-fpm php7.1-gd php7.1-intl php7.1-json php7.1-mbstring php7.1-mcrypt php7.1-mysql php7.1-opcache php7.1-readline php7.1-xml php7.1-xmlrpc php7.1-xsl php7.1-zip
+sudo apt install -y php7.1-bz2 php7.1-cli php7.1-common php7.1-curl php7.1-fpm php7.1-gd php7.1-intl php7.1-json php7.1-mbstring php7.1-mcrypt php7.1-mysql php7.1-opcache php7.1-readline php7.1-xml php7.1-xmlrpc php7.1-xsl php7.1-zip php-redis
 sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.1/cli/php.ini
 sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
 sudo sed -i "s/; max_input_vars =.*/max_input_vars = 5000/" /etc/php/7.1/fpm/php.ini
