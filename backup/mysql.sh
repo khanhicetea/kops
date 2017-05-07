@@ -10,9 +10,9 @@ CWD=$(dirname $0)
 BACKUP_DIR="$1"
 TODAY=`date +%Y-%m-%d`
 RM_DAY=`date --date="14 days ago" +%Y-%m-%d`
-HOSTNAME=`hostname`
-FILENAME=$HOSTNAME.$TODAY.sql.gz
-RM_FILENAME=$HOSTNAME.$RM_DAY.sql.gz
+HOSTIP=`ip route get 1 | awk '{print $NF;exit}'`
+FILENAME=$HOSTIP.$TODAY.sql.gz
+RM_FILENAME=$HOSTIP.$RM_DAY.sql.gz
 
 BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema)$")
 
