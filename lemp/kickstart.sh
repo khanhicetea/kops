@@ -72,15 +72,12 @@ sudo mkdir /usr/share/nginx/acme-challenge
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
-# MariaDB 10.1
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://download.nus.edu.sg/mirror/mariadb/repo/10.1/ubuntu xenial main'
-sudo apt update
-export DEBIAN_FRONTEND=noninteractive
-debconf-set-selections <<< 'mariadb-server-10.1 mysql-server/root_password password passwd'
-debconf-set-selections <<< 'mariadb-server-10.1 mysql-server/root_password_again password passwd'
-sudo apt install mariadb-server mariadb-client -y
-sudo service mysql restart
+# MySQL 5.7
+echo "mysql-server-5.7 mysql-server/root_password password passwd" | sudo debconf-set-selections
+echo "mysql-server-5.7 mysql-server/root_password_again password passwd" | sudo debconf-set-selections
+sudo apt install mysql-server -y
+sudo systemctl enable mysql.service
+sudo systemctl restart mysql.service
 
 # Redis server
 sudo add-apt-repository ppa:chris-lea/redis-server -y
