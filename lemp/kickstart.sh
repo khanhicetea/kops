@@ -73,6 +73,7 @@ sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
 # MySQL 5.7
+export DEBIAN_FRONTEND=noninteractive
 echo "mysql-server-5.7 mysql-server/root_password password passwd" | sudo debconf-set-selections
 echo "mysql-server-5.7 mysql-server/root_password_again password passwd" | sudo debconf-set-selections
 sudo apt install mysql-server -y
