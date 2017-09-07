@@ -80,28 +80,11 @@ http {
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
 
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                      '\$status \$body_bytes_sent "\$http_referer" '
+                      '"\$http_user_agent" "\$http_x_forwarded_for"';
 
     access_log  /var/log/nginx/access.log  main;
-
-    keepalive_timeout 65;
-    keepalive_requests 100000;
-    sendfile on;
-    tcp_nopush on;
-    tcp_nodelay on;
-    
-    reset_timedout_connection on;
-    client_body_buffer_size 128k;
-    client_max_body_size         10m;
-    client_header_buffer_size    1k;
-    large_client_header_buffers  4 4k;
-    output_buffers               4 64k;
-    postpone_output              1460;
-    client_header_timeout  3m;
-    client_body_timeout    3m;
-    send_timeout           3m;
 
     include /etc/nginx/conf.d/*.conf;
 }
@@ -109,8 +92,23 @@ EOF
 sudo mv /tmp/nginx_conf /etc/nginx/nginx.conf
 
 cat >/tmp/nginx_conf <<EOF
+keepalive_timeout 65;
+keepalive_requests 100000;
+sendfile on;
 tcp_nopush on;
 tcp_nodelay on;
+
+reset_timedout_connection on;
+client_body_buffer_size 128k;
+client_max_body_size         10m;
+client_header_buffer_size    1k;
+large_client_header_buffers  4 4k;
+output_buffers               4 64k;
+postpone_output              1460;
+client_header_timeout  3m;
+client_body_timeout    3m;
+send_timeout           3m;
+
 types_hash_max_size 2048;
 server_tokens off;
 
