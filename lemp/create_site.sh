@@ -68,7 +68,7 @@ server {
         }
         
         location ~ /\\.  {
-            return 404;
+            deny all;
         }
 }
 EOF
