@@ -1,9 +1,26 @@
 #!/bin/bash
 
-# Disable IPv6
+# Timezone
+sudo timedatectl set-timezone Asia/Ho_Chi_Minh
+sudo timedatectl set-ntp on
+
+# Harden linux
+echo "kernel.randomize_va_space = 1" | sudo tee -a /etc/sysctl.conf
+
+echo "net.ipv4.conf.all.rp_filter = 1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.conf.all.accept_source_route = 0" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.icmp_echo_ignore_broadcasts = 1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_timestamps = 0" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_syncookies = 1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_max_syn_backlog = 2048" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_synack_retries = 3" | sudo tee -a /etc/sysctl.conf
+
 echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
+
+echo "fs.file-max = 65536" | sudo tee -a /etc/sysctl.conf
+
 sudo sysctl -p
 
 # Firewall
@@ -13,10 +30,16 @@ sudo ufw default allow outgoing
 sudo ufw allow 22/tcp
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
+sudo ufw limit OpenSSH
 sudo ufw --force enable
 
 # SSH disable password authentication (make sure you configured authorized keys)
 test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo service ssh restart
+
+# Remove unused packages
+sudo apt --yes purge nfs-kernel-server nfs-common portmap rpcbind autofs
+sudo apt --yes purge whoopsie
+
 
 # Upgrade system
 sudo apt update
@@ -35,8 +58,8 @@ echo "deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx" | sudo te
 wget -qO - https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 sudo apt update
 sudo apt install nginx -y
-sudo sed -i "s/worker_processes .*;/worker_processes auto;/" /etc/nginx/nginx.conf
-sudo sed -i "s/worker_connections .*;/worker_connections 1024;\\n\\tmulti_accept on;/" /etc/nginx/nginx.conf
+sudo sed -i "s/worker_processes .*;/worker_processes auto;\\n\\tworker_rlimit_nofile 30000;/" /etc/nginx/nginx.conf
+sudo sed -i "s/worker_connections .*;/worker_connections 2048;\\n\\tmulti_accept on;/" /etc/nginx/nginx.conf
 cat >/tmp/nginx_conf <<EOF
 tcp_nopush on;
 tcp_nodelay on;
@@ -69,6 +92,8 @@ sudo sed -i 's/fastcgi_param  SCRIPT_NAME.*/fastcgi_param SCRIPT_FILENAME \$docu
 sudo mkdir /var/lego
 sudo mkdir /etc/nginx/ssl
 sudo mkdir /usr/share/nginx/acme-challenge
+echo "nginx   soft    nofile  10000" | sudo tee -a /etc/security/limits.conf
+echo "nginx   hard    nofile  30000" | sudo tee -a /etc/security/limits.conf
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
