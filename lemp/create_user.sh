@@ -4,6 +4,7 @@ USERNAME="$1"
 
 # Create linux user
 sudo useradd -m -N -g nginx $USERNAME
+sudo chsh -s /bin/bash $USERNAME
 
 # Composer install plugins
 sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
