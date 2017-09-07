@@ -58,8 +58,40 @@ echo "deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx" | sudo te
 wget -qO - https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 sudo apt update
 sudo apt install nginx -y
-sudo sed -i "s/worker_processes .*;/worker_processes auto;\\n\\tworker_rlimit_nofile 30000;/" /etc/nginx/nginx.conf
-sudo sed -i "s/worker_connections .*;/worker_connections 2048;\\n\\tmulti_accept on;/" /etc/nginx/nginx.conf
+
+cat >/tmp/nginx_conf <<EOF
+user  nginx;
+worker_processes auto;
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    use epoll;
+    multi_accept on;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    keepalive_timeout 65;
+    keepalive_requests 100000;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+EOF
+sudo mv /tmp/nginx_conf /etc/nginx/nginx.conf
+
 cat >/tmp/nginx_conf <<EOF
 tcp_nopush on;
 tcp_nodelay on;
@@ -129,7 +161,7 @@ sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /
 sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.1/fpm/php.ini
 sudo systemctl enable php7.1-fpm.service
 sudo systemctl restart php7.1-fpm.service
-curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && rm composer-setup.php
+curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php
 
 # DONE
 echo "BAMMMMM ! It's done ! Remind to change MySQL root password !"
