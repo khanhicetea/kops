@@ -6,6 +6,7 @@ sudo timedatectl set-ntp on
 
 # Harden linux
 echo "kernel.randomize_va_space = 1" | sudo tee -a /etc/sysctl.conf
+echo "net.core.somaxconn = 65536" | sudo tee -a /etc/sysctl.conf
 
 echo "net.ipv4.conf.all.rp_filter = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.conf.all.accept_source_route = 0" | sudo tee -a /etc/sysctl.conf
@@ -14,6 +15,7 @@ echo "net.ipv4.tcp_timestamps = 0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_syncookies = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_max_syn_backlog = 2048" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_synack_retries = 3" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_max_tw_buckets = 1440000" | sudo tee -a /etc/sysctl.conf
 
 echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
@@ -86,6 +88,13 @@ http {
     sendfile on;
     tcp_nopush on;
     tcp_nodelay on;
+    
+    client_body_buffer_size 128k;
+    client_max_body_size         10m;
+    client_header_buffer_size    1k;
+    large_client_header_buffers  4 4k;
+    output_buffers               4 64k;
+    postpone_output              1460;
 
     include /etc/nginx/conf.d/*.conf;
 }
