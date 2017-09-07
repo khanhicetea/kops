@@ -123,9 +123,11 @@ sudo mv /tmp/nginx_fastcgi_snipets /etc/nginx/fastcgi_snippets
 sudo sed -i 's/fastcgi_param  SCRIPT_NAME.*/fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;/' /etc/nginx/fastcgi_params
 sudo mkdir /var/lego
 sudo mkdir /etc/nginx/ssl
+sudo mkdir /etc/nginx/certs
 sudo mkdir /usr/share/nginx/acme-challenge
 echo "nginx   soft    nofile  10000" | sudo tee -a /etc/security/limits.conf
 echo "nginx   hard    nofile  30000" | sudo tee -a /etc/security/limits.conf
+sudo openssl dhparam -out /etc/nginx/certs/dhparam.pem 4096
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
