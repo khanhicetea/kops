@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # To temp dir
-sudo mkdir /tmp/lemp
+mkdir /tmp/lemp
 cd /tmp/lemp
 
 # Timezone
@@ -179,6 +179,8 @@ sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/ph
 sudo systemctl enable php7.1-fpm.service
 sudo systemctl restart php7.1-fpm.service
 curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php
+
+rm -rf /tmp/lemp
 
 # DONE
 echo "BAMMMMM ! It's done ! Remind to change MySQL root password !"
