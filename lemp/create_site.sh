@@ -45,6 +45,7 @@ server {
         ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;
         ssl_session_cache shared:SSL:50m;
         ssl_prefer_server_ciphers on;
+        ssl_dhparam /etc/nginx/certs/dhparam.pem;
         add_header Strict-Transport-Security "max-age=31536000";
         
         location ~* ^.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|svg)\$ {
