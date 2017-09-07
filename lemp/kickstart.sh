@@ -142,7 +142,7 @@ sudo mkdir /etc/nginx/certs
 sudo mkdir /usr/share/nginx/acme-challenge
 echo "nginx   soft    nofile  10000" | sudo tee -a /etc/security/limits.conf
 echo "nginx   hard    nofile  30000" | sudo tee -a /etc/security/limits.conf
-sudo openssl dhparam -out /etc/nginx/certs/dhparam.pem 4096
+sudo openssl dhparam -dsaparam -out /etc/nginx/certs/dhparam.pem 2048
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
