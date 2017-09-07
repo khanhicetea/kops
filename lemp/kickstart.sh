@@ -25,7 +25,7 @@ sudo apt upgrade -y
 
 # Install tools
 sudo apt install git screen vim curl software-properties-common -y
-wget https://github.com/xenolf/lego/releases/download/v0.3.1/lego_linux_amd64.tar.xz && tar xf lego_linux_amd64.tar.xz && chmod +x lego/lego && sudo mv lego/lego /usr/local/bin/lego && rm -rf lego && rm -f lego_linux_amd64.tar.xz
+wget https://github.com/xenolf/lego/releases/download/v0.4.0/lego_linux_amd64.tar.xz && tar xf lego_linux_amd64.tar.xz && chmod +x lego/lego && sudo mv lego/lego /usr/local/bin/lego && rm -rf lego && rm -f lego_linux_amd64.tar.xz
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 
@@ -108,4 +108,3 @@ curl https://getcomposer.org/installer > composer-setup.php && php composer-setu
 
 # DONE
 echo "BAMMMMM ! It's done ! Remind to change MySQL root password !"
-
