@@ -36,12 +36,16 @@ server {
         listen 443 ssl http2;
         server_name ${DOMAIN};
         root /home/${USERNAME}/${DOMAIN}/${DOC_ROOT};
-        index index.html index.htm index.php;
+        index index.php index.html index.htm;
 
         ssl_certificate /etc/nginx/ssl/${DOMAIN}.crt;
         ssl_certificate_key /etc/nginx/ssl/${DOMAIN}.key;
+        ssl_session_timeout 5m;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;
+        ssl_session_cache shared:SSL:50m;
         ssl_prefer_server_ciphers on;
-        ssl_ciphers EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+        add_header Strict-Transport-Security "max-age=31536000";
         
         location ~* ^.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|svg)\$ {
                 try_files \$uri =404;
@@ -62,9 +66,9 @@ server {
                 fastcgi_pass unix:/run/php/php7.1-fpm.${USERNAME}.sock;
                 fastcgi_read_timeout 60;
         }
-
-        location ~ /\\.ht {
-                deny all;
+        
+        location ~ /\\.  {
+            deny all;
         }
 }
 EOF
@@ -72,7 +76,8 @@ sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
 sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf && sudo systemctl reload nginx.service
 sudo touch /etc/cron.d/letencrypt
-echo "0 0 1 * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee -a /etc/cron.d/letencrypt
+DOM=$(( $RANDOM % 28 + 1 ))
+echo "0 0 $DOM * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee -a /etc/cron.d/letencrypt
 
 # Done
 echo -e "\nDone ! Enjoy it !"
