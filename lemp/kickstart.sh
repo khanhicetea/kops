@@ -89,12 +89,16 @@ http {
     tcp_nopush on;
     tcp_nodelay on;
     
+    reset_timedout_connection on;
     client_body_buffer_size 128k;
     client_max_body_size         10m;
     client_header_buffer_size    1k;
     large_client_header_buffers  4 4k;
     output_buffers               4 64k;
     postpone_output              1460;
+    client_header_timeout  3m;
+    client_body_timeout    3m;
+    send_timeout           3m;
 
     include /etc/nginx/conf.d/*.conf;
 }
@@ -109,6 +113,7 @@ server_tokens off;
 
 gzip on;
 gzip_disable "msie6";
+gzip_min_length 1000;
 gzip_vary on;
 gzip_proxied any;
 gzip_comp_level 6;
