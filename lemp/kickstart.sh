@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# To temp dir
+sudo mkdir /tmp/lemp
+cd /tmp/lemp
+
 # Timezone
 sudo timedatectl set-timezone Asia/Ho_Chi_Minh
 sudo timedatectl set-ntp on
@@ -41,7 +45,6 @@ test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/
 # Remove unused packages
 sudo apt --yes purge nfs-kernel-server nfs-common portmap rpcbind autofs
 sudo apt --yes purge whoopsie
-
 
 # Upgrade system
 sudo apt update
