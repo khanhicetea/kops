@@ -80,5 +80,11 @@ sudo touch /etc/cron.d/letencrypt
 DOM=$(( $RANDOM % 28 + 1 ))
 echo "0 0 $DOM * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee -a /etc/cron.d/letencrypt
 
+if [ $# -eq 5 ]
+then
+    DB_NAME="$5"
+    mysql -e "CREATE SCHEMA \`$DB_NAME\` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+fi
+
 # Done
 echo -e "\nDone ! Enjoy it !"
