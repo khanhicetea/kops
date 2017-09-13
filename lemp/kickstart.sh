@@ -153,6 +153,7 @@ echo "mysql-server-5.7 mysql-server/root_password_again password passwd" | sudo 
 sudo apt install mysql-server -y
 sudo systemctl enable mysql.service
 sudo systemctl restart mysql.service
+echo -e "[client]\nuser=root\npassword=passwd" > ~/.my.cnf
 
 # Redis server
 sudo add-apt-repository ppa:chris-lea/redis-server -y
