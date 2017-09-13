@@ -33,5 +33,10 @@ sudo rm -f /etc/php/7.1/fpm/pool.d/www.conf
 # Reload php-fpm service
 sudo systemctl reload php7.1-fpm.service
 
+# Create MySQL user
+RANDOM_PASS=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16 ; echo ''`
+mysql -e "CREATE USER '$1'@'%' IDENTIFIED BY '$RANDOM_PASS'; GRANT ALL PRIVILEGES ON \`$1\\_%\`.* TO '$1'@'%'; FLUSH PRIVILEGES"
+echo "MySQL user password is $RANDOM_PASS"
+
 # Done
 echo "Done !"
