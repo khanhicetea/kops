@@ -82,8 +82,9 @@ echo "0 0 $DOM * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --pat
 
 if [ $# -eq 5 ]
 then
-    DB_NAME="$5"
-    mysql -e "CREATE SCHEMA \`$USERNAME_$DB_NAME\` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+    DB="$5"
+    DB_NAME=${USERNAME}_${DB}
+    mysql -e "CREATE SCHEMA \`$DB_NAME\` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
 fi
 
 # Done
