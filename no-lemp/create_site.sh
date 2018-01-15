@@ -57,10 +57,6 @@ server {
         location ~* \\.(eot|ttf|woff)\$ {
                 add_header Access-Control-Allow-Origin '*';
         }
-
-        location / {
-                try_files \$uri /index.php\$is_args\$args;
-        }
         
         location ~ /\\.  {
             deny all;
