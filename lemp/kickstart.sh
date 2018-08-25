@@ -53,7 +53,7 @@ sudo apt upgrade -y
 
 # Install tools
 sudo apt install git screen vim curl software-properties-common -y
-wget https://github.com/xenolf/lego/releases/download/v0.4.0/lego_linux_amd64.tar.xz && mkdir lego_linux && tar xf lego_linux_amd64.tar.xz -C lego_linux && chmod +x lego_linux/lego_linux_amd64 && sudo mv lego_linux/lego_linux_amd64 /usr/local/bin/lego && rm -f lego_linux_amd64.tar.xz && rm -rf lego_linux
+wget https://github.com/xenolf/lego/releases/download/v1.0.1/lego_v1.0.1_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v1.0.1_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v1.0.1_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 
