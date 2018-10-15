@@ -14,7 +14,7 @@ HOSTIP=`ip route get 1 | awk '{print $NF;exit}'`
 FILENAME=$HOSTIP.$TODAY.sql.gz
 RM_FILENAME=$HOSTIP.$RM_DAY.sql.gz
 
-BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema)$")
+BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema|sys)$")
 
 echo "Backup database in $TODAY ...."
 mysqldump --opt --routines --compact --force --databases ${BACKUP_DBS} | gzip > $BACKUP_DIR/$FILENAME
