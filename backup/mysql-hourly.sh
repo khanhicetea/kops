@@ -13,7 +13,7 @@ else
     BACKUP_DBS="$3"
 fi
 
-UPLOAD_DIR=${2:}
+UPLOAD_DIR=${2:""}
 
 CWD=$(dirname $0)
 BACKUP_DIR="$1"
