@@ -14,11 +14,12 @@ else
 fi
 
 UPLOAD_DIR="$2"
+KEEP_DAYS="$4"
 CWD=$(dirname $0)
 BACKUP_DIR="$1"
 TODAY=`date +%Y-%m-%d`
 BKTIME=`date +%H_%M`
-RM_DAY=`date --date="14 days ago" +%Y-%m-%d`
+RM_DAY=`date --date="$KEEP_DAYS days ago" +%Y-%m-%d`
 FILENAME=$BKTIME.sql.gz
 
 echo "Backup database in $TODAY ...."
