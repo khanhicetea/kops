@@ -6,6 +6,13 @@ then
     exit 1
 fi
 
+if [ -z "$2" ]
+then
+    BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema|sys)$")
+else
+    BACKUP_DBS="$2"
+fi
+
 CWD=$(dirname $0)
 BACKUP_DIR="$1"
 TODAY=`date +%Y-%m-%d`
@@ -13,8 +20,6 @@ RM_DAY=`date --date="14 days ago" +%Y-%m-%d`
 HOSTIP=`ip route get 1 | awk '{print $NF;exit}'`
 FILENAME=$HOSTIP.$TODAY.sql.gz
 RM_FILENAME=$HOSTIP.$RM_DAY.sql.gz
-
-BACKUP_DBS=$(echo "show databases" | mysql | grep -Ev "^(Database|mysql|performance_schema|information_schema|sys)$")
 
 echo "Backup database in $TODAY ...."
 mysqldump --opt --routines --compact --force --databases ${BACKUP_DBS} | gzip > $BACKUP_DIR/$FILENAME
