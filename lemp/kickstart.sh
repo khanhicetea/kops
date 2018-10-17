@@ -47,6 +47,7 @@ sudo apt --yes purge nfs-kernel-server nfs-common portmap rpcbind autofs
 sudo apt --yes purge whoopsie
 
 # Upgrade system
+sudo add-apt-repository universe
 sudo apt update
 sudo apt list --upgradable
 sudo apt upgrade -y
@@ -58,8 +59,8 @@ echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 
 # NGINX (mainline branch)
-echo "deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx" | sudo tee -a /etc/apt/sources.list
-echo "deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx" | sudo tee -a /etc/apt/sources.list
+echo "deb http://nginx.org/packages/mainline/ubuntu/ bionic nginx" | sudo tee -a /etc/apt/sources.list
+echo "deb-src http://nginx.org/packages/mainline/ubuntu/ bionic nginx" | sudo tee -a /etc/apt/sources.list
 wget -qO - https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
 sudo apt update
 sudo apt install nginx -y
@@ -162,23 +163,23 @@ sudo apt install redis-server -y
 sudo systemctl enable redis-server.service
 sudo systemctl restart redis-server.service
 
-# PHP 7.1 (via PPA)
+# PHP 7.2 (via PPA)
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install -y php7.1-bz2 php7.1-cli php7.1-common php7.1-curl php7.1-fpm php7.1-gd php7.1-intl php7.1-json php7.1-mbstring php7.1-mcrypt php7.1-mysql php7.1-opcache php7.1-readline php7.1-xml php7.1-xmlrpc php7.1-xsl php7.1-zip php-redis
-sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/; max_input_vars =.*/max_input_vars = 5000/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.1/fpm/php.ini
-sudo systemctl enable php7.1-fpm.service
-sudo systemctl restart php7.1-fpm.service
+sudo apt install -y php7.2-bz2 php7.2-cli php7.2-common php7.2-curl php7.2-fpm php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-xml php7.2-xmlrpc php7.2-xsl php7.2-zip php-redis
+sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.2/cli/php.ini
+sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/; max_input_vars =.*/max_input_vars = 5000/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.2/fpm/php.ini
+sudo systemctl enable php7.2-fpm.service
+sudo systemctl restart php7.2-fpm.service
 curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php
 
 rm -rf /tmp/lemp

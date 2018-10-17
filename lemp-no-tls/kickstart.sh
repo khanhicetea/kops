@@ -35,7 +35,6 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow 22/tcp
 sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
 sudo ufw limit OpenSSH
 sudo ufw --force enable
 
@@ -54,7 +53,6 @@ sudo apt upgrade -y
 
 # Install tools
 sudo apt install git screen vim curl software-properties-common -y
-wget https://github.com/xenolf/lego/releases/download/v1.0.1/lego_v1.0.1_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v1.0.1_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v1.0.1_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 
@@ -137,17 +135,47 @@ include fastcgi_params;
 EOF
 sudo mv /tmp/nginx_fastcgi_snipets /etc/nginx/fastcgi_snippets
 sudo sed -i 's/fastcgi_param  SCRIPT_NAME.*/fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;/' /etc/nginx/fastcgi_params
-sudo mkdir /var/lego
-sudo mkdir /etc/nginx/ssl
-sudo mkdir /etc/nginx/certs
-sudo mkdir /usr/share/nginx/acme-challenge
 echo "nginx   soft    nofile  10000" | sudo tee -a /etc/security/limits.conf
 echo "nginx   hard    nofile  30000" | sudo tee -a /etc/security/limits.conf
-sudo openssl dhparam -dsaparam -out /etc/nginx/certs/dhparam.pem 2048
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
+
+# MySQL 5.7
+export DEBIAN_FRONTEND=noninteractive
+echo "mysql-server-5.7 mysql-server/root_password password passwd" | sudo debconf-set-selections
+echo "mysql-server-5.7 mysql-server/root_password_again password passwd" | sudo debconf-set-selections
+sudo apt install mysql-server -y
+sudo systemctl enable mysql.service
+sudo systemctl restart mysql.service
+echo -e "[client]\nuser=root\npassword=passwd" > ~/.my.cnf
+
+# Redis server
+sudo add-apt-repository ppa:chris-lea/redis-server -y
+sudo apt update
+sudo apt install redis-server -y
+sudo systemctl enable redis-server.service
+sudo systemctl restart redis-server.service
+
+# PHP 7.2 (via PPA)
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
+sudo apt install -y php7.2-bz2 php7.2-cli php7.2-common php7.2-curl php7.2-fpm php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-xml php7.2-xmlrpc php7.2-xsl php7.2-zip php-redis
+sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.2/cli/php.ini
+sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/; max_input_vars =.*/max_input_vars = 5000/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.2/fpm/php.ini
+sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.2/fpm/php.ini
+sudo systemctl enable php7.2-fpm.service
+sudo systemctl restart php7.2-fpm.service
+curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php
 
 rm -rf /tmp/lemp
 
 # DONE
-echo "BAMMMMM ! It's done !"
+echo "BAMMMMM ! It's done ! Remind to change MySQL root password !"
