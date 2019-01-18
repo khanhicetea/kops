@@ -42,10 +42,6 @@ sudo ufw --force enable
 # SSH disable password authentication (make sure you configured authorized keys)
 test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo service ssh restart
 
-# Remove unused packages
-sudo apt --yes purge nfs-kernel-server nfs-common portmap rpcbind autofs
-sudo apt --yes purge whoopsie
-
 # Upgrade system
 sudo add-apt-repository universe
 sudo apt update
@@ -54,7 +50,7 @@ sudo apt upgrade -y
 
 # Install tools
 sudo apt install git screen vim curl software-properties-common -y
-wget https://github.com/xenolf/lego/releases/download/v1.0.1/lego_v1.0.1_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v1.0.1_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v1.0.1_linux_amd64.tar.gz && rm -rf lego_linux
+wget https://github.com/xenolf/lego/releases/download/v2.0.1/lego_v2.0.1_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v2.0.1_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v2.0.1_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 

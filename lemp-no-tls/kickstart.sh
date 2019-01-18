@@ -41,10 +41,6 @@ sudo ufw --force enable
 # SSH disable password authentication (make sure you configured authorized keys)
 test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo service ssh restart
 
-# Remove unused packages
-sudo apt --yes purge nfs-kernel-server nfs-common portmap rpcbind autofs
-sudo apt --yes purge whoopsie
-
 # Upgrade system
 sudo add-apt-repository universe
 sudo apt update
