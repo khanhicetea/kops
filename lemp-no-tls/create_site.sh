@@ -41,7 +41,7 @@ server {
 
         location ~ \\.php\$ {
                 include fastcgi_snippets;
-                fastcgi_pass unix:/run/php/php7.2-fpm.${USERNAME}.sock;
+                fastcgi_pass unix:/run/php/php7.3-fpm.${USERNAME}.sock;
                 fastcgi_read_timeout 60;
         }
         

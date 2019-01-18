@@ -16,7 +16,7 @@ user = ${USERNAME}
 group = nginx
 listen.owner = nginx
 listen.group = nginx
-listen = /run/php/php7.2-fpm.${USERNAME}.sock
+listen = /run/php/php7.3-fpm.${USERNAME}.sock
 pm = dynamic
 pm.max_children = 5
 pm.start_servers = 2
@@ -27,11 +27,11 @@ pm.max_requests = 1024
 request_terminate_timeout = 300s
 EOF
 
-sudo mv /tmp/new_phpfpm_pool.conf /etc/php/7.2/fpm/pool.d/$USERNAME.conf
-sudo rm -f /etc/php/7.2/fpm/pool.d/www.conf
+sudo mv /tmp/new_phpfpm_pool.conf /etc/php/7.3/fpm/pool.d/$USERNAME.conf
+sudo rm -f /etc/php/7.3/fpm/pool.d/www.conf
 
 # Reload php-fpm service
-sudo systemctl reload php7.2-fpm.service
+sudo systemctl reload php7.3-fpm.service
 
 # Create MySQL user
 RANDOM_PASS=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16 ; echo ''`

@@ -152,23 +152,23 @@ sudo apt install redis-server -y
 sudo systemctl enable redis-server.service
 sudo systemctl restart redis-server.service
 
-# PHP 7.2 (via PPA)
+# PHP 7.3 (via PPA)
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install -y php7.2-bz2 php7.2-cli php7.2-common php7.2-curl php7.2-fpm php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-xml php7.2-xmlrpc php7.2-xsl php7.2-zip php-redis
-sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.2/cli/php.ini
-sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/; max_input_vars =.*/max_input_vars = 5000/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.2/fpm/php.ini
-sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.2/fpm/php.ini
-sudo systemctl enable php7.2-fpm.service
-sudo systemctl restart php7.2-fpm.service
+sudo apt install -y php7.3-bz2 php7.3-cli php7.3-common php7.3-curl php7.3-fpm php7.3-gd php7.3-intl php7.3-json php7.3-mbstring php7.3-mysql php7.3-opcache php7.3-readline php7.3-xml php7.3-xmlrpc php7.3-xsl php7.3-zip php-redis
+sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.3/cli/php.ini
+sudo sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/; max_input_vars =.*/max_input_vars = 5000/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.3/fpm/php.ini
+sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=10/" /etc/php/7.3/fpm/php.ini
+sudo systemctl enable php7.3-fpm.service
+sudo systemctl restart php7.3-fpm.service
 curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php
 
 rm -rf /tmp/lemp
