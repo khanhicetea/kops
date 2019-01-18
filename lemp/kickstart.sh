@@ -159,6 +159,10 @@ sudo apt install redis-server -y
 sudo systemctl enable redis-server.service
 sudo systemctl restart redis-server.service
 
+# Node 10
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt install -y nodejs
+
 # PHP 7.3 (via PPA)
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
