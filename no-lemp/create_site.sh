@@ -48,7 +48,7 @@ server {
         ssl_dhparam /etc/nginx/certs/dhparam.pem;
         add_header Strict-Transport-Security "max-age=31536000";
         
-        location ~* ^.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|svg)\$ {
+        location ~* ^.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|xml|otf|ttf|eot|woff|svg)\$ {
                 try_files \$uri =404;
                 access_log off;
                 expires 30d;

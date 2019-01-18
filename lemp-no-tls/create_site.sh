@@ -25,7 +25,7 @@ server {
         root /home/${USERNAME}/${DOMAIN}/${DOC_ROOT};
         index index.php index.html index.htm;
         
-        location ~* ^.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|svg)\$ {
+        location ~* ^.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|xml|otf|ttf|eot|woff|svg)\$ {
                 try_files \$uri =404;
                 access_log off;
                 expires 30d;
