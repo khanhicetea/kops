@@ -17,6 +17,7 @@ fi
 
 sudo mkdir /home/$USERNAME/$DOMAIN
 sudo chown -R $USERNAME:www-data /home/$USERNAME/$DOMAIN
+sudo chmod g+s /home/$USERNAME/$DOMAIN
 
 sudo tee -a /etc/caddy/Caddyfile <<EOF
 ${DOMAIN}:80,

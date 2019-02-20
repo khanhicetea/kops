@@ -75,6 +75,13 @@ sudo chown root:root /etc/systemd/system/caddy.service
 sudo chmod 644 /etc/systemd/system/caddy.service
 sudo systemctl daemon-reload
 
+cat >/tmp/caddy_conf <<EOF
+:80 {
+    status 404 /
+}
+EOF
+sudo mv /tmp/caddy_conf /etc/caddy/Caddyfile
+
 echo "www-data   soft    nofile  10000" | sudo tee -a /etc/security/limits.conf
 echo "www-data   hard    nofile  30000" | sudo tee -a /etc/security/limits.conf
 sudo systemctl enable caddy.service
