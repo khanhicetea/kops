@@ -77,7 +77,7 @@ sudo systemctl daemon-reload
 
 cat >/tmp/caddy_conf <<EOF
 :80 {
-    status 404 /
+    status 200 /
 }
 EOF
 sudo mv /tmp/caddy_conf /etc/caddy/Caddyfile
