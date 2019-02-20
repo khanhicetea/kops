@@ -70,7 +70,8 @@ sudo chown -R root:www-data /etc/ssl/caddy
 sudo chmod 0770 /etc/ssl/caddy
 
 wget https://raw.githubusercontent.com/mholt/caddy/master/dist/init/linux-systemd/caddy.service
-sudo cp caddy.service /etc/systemd/system/
+sudo mv caddy.service /etc/systemd/system/
+sudo sed -i -e 's/ProtectHome=true/ProtectHome=false/' /etc/systemd/system/caddy.service
 sudo chown root:root /etc/systemd/system/caddy.service
 sudo chmod 644 /etc/systemd/system/caddy.service
 sudo systemctl daemon-reload
