@@ -57,7 +57,7 @@ if [ $# -eq 4 ]
 then
     DB="$4"
     DB_NAME=${USERNAME}_${DB}
-    mysql -e "CREATE SCHEMA \`$DB_NAME\` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+    mysql -e "CREATE SCHEMA \`$DB_NAME\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 fi
 
 # Done
