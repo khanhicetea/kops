@@ -5,7 +5,7 @@ USERNAME="$1"
 # Create linux user
 sudo useradd -m -N -g www-data $USERNAME
 sudo chsh -s /bin/bash $USERNAME
-echo "umask 027" >> /home/$USERNAME/.bashrc
+echo "umask 027" | sudo tee -a /home/$USERNAME/.bashrc
 
 # Composer install plugins
 sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
