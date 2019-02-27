@@ -27,7 +27,7 @@ mkdir -p /home/$GH_USERNAME/.ssh
 wget -q -O- "${GITHUBKEYS}" >> /home/$GH_USERNAME/.ssh/authorized_keys
 chown -R $GH_USERNAME:$GH_USERNAME /home/$GH_USERNAME/.ssh
 chmod 600 /home/$GH_USERNAME/.ssh/authorized_keys
-service ssh restart
+systemctl restart ssh
 
 # Lock root
 passwd -l root
