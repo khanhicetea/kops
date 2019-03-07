@@ -120,19 +120,7 @@ gzip_http_version 1.1;
 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript;
 EOF
 sudo mv /tmp/nginx_conf /etc/nginx/conf.d/nginx.conf
-cat >/tmp/nginx_fastcgi_snipets <<EOF
-fastcgi_split_path_info ^(.+\\.php)(/.+)$;
-try_files \$fastcgi_script_name =404;
 
-set \$path_info \$fastcgi_path_info;
-fastcgi_param PATH_INFO \$path_info;
-fastcgi_param HTTP_PROXY "";
-
-fastcgi_index index.php;
-include fastcgi_params;
-EOF
-sudo mv /tmp/nginx_fastcgi_snipets /etc/nginx/fastcgi_snippets
-sudo sed -i 's/fastcgi_param  SCRIPT_NAME.*/fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;/' /etc/nginx/fastcgi_params
 sudo mkdir /var/lego
 sudo mkdir /etc/nginx/ssl
 sudo mkdir /etc/nginx/certs
