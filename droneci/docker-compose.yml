@@ -12,6 +12,7 @@ services:
     volumes:
       - drone_ci_mysql:/var/lib/mysql
     environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
