@@ -10,7 +10,7 @@ services:
   drone-mysql:
     image: mysql:5.7
     volumes:
-      drone_ci_mysql:/var/lib/mysql
+      - drone_ci_mysql:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
 
