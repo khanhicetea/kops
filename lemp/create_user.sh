@@ -14,6 +14,7 @@ sudo runuser -l $USERNAME -c "chmod 775 /home/$USERNAME/logs"
 
 # Jobber
 sudo systemctl restart jobber
+sleep 3
 sudo runuser -l $USERNAME -c 'jobber init'
 cat >/tmp/user_jobber <<EOF
 version: 1.4
