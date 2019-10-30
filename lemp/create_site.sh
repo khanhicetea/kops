@@ -76,7 +76,7 @@ server {
 EOF
 sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
-sudo /usr/local/bin/lego -a -k rsa2048 --path /var/lego --email $email --domains $domain --http --http.webroot="/usr/share/nginx/acme-challenge" run
+sudo /usr/local/bin/lego -a -k rsa2048 --path /var/lego --email $LE_EMAIL --domains $DOMAIN --http --http.webroot="/usr/share/nginx/acme-challenge" run
 sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
 
