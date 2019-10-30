@@ -10,14 +10,22 @@ sudo timedatectl set-ntp on
 
 # Harden linux
 echo "kernel.randomize_va_space = 1" | sudo tee -a /etc/sysctl.conf
-echo "net.core.somaxconn = 65536" | sudo tee -a /etc/sysctl.conf
+echo "kernel.sched_migration_cost_ns = 5000000" | sudo tee -a /etc/sysctl.conf
+echo "kernel.sched_autogroup_enabled = 0" | sudo tee -a /etc/sysctl.conf
 
+echo "net.core.rmem_max = 16777216" | sudo tee -a /etc/sysctl.conf
+echo "net.core.wmem_max = 16777216" | sudo tee -a /etc/sysctl.conf
+echo "net.core.somaxconn = 1024" | sudo tee -a /etc/sysctl.conf
+
+echo "net.ipv4.ip_local_port_range = 1024 65535" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_tw_recycle = 1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_tw_reuse = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.conf.all.rp_filter = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.conf.all.accept_source_route = 0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.icmp_echo_ignore_broadcasts = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_timestamps = 0" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_syncookies = 1" | sudo tee -a /etc/sysctl.conf
-echo "net.ipv4.tcp_max_syn_backlog = 2048" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.tcp_max_syn_backlog = 4096" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_synack_retries = 3" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_max_tw_buckets = 1440000" | sudo tee -a /etc/sysctl.conf
 
@@ -25,7 +33,11 @@ echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 
-echo "fs.file-max = 65536" | sudo tee -a /etc/sysctl.conf
+echo "fs.file-max = 100000" | sudo tee -a /etc/sysctl.conf
+
+echo "vm.swappiness = 5" | sudo tee -a /etc/sysctl.conf
+echo "vm.dirty_ratio = 60" | sudo tee -a /etc/sysctl.conf
+echo "vm.dirty_background_ratio = 10" | sudo tee -a /etc/sysctl.conf
 
 sudo sysctl -p
 
@@ -40,7 +52,7 @@ sudo ufw limit OpenSSH
 sudo ufw --force enable
 
 # SSH disable password authentication (make sure you configured authorized keys)
-test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo service ssh restart
+test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo systemctl restart ssh
 
 # Upgrade system
 sudo add-apt-repository universe
@@ -50,7 +62,7 @@ sudo apt upgrade -y
 
 # Install tools
 sudo apt install git screen vim curl software-properties-common -y
-wget https://github.com/xenolf/lego/releases/download/v3.0.2/lego_v3.0.2_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.0.2_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.0.2_linux_amd64.tar.gz && rm -rf lego_linux
+wget https://github.com/xenolf/lego/releases/download/v3.1.0/lego_v3.1.0_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.1.0_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.1.0_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
 

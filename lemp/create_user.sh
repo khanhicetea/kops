@@ -1,9 +1,11 @@
 #!/bin/bash
 
+set -e
+
 USERNAME="$1"
 
 # Create linux user
-sudo useradd -m -N -g nginx $USERNAME
+sudo useradd -m -N -g www-data $USERNAME
 sudo chsh -s /bin/bash $USERNAME
 echo "umask 027" | sudo tee -a /home/$USERNAME/.bashrc
 
@@ -14,18 +16,24 @@ sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
 cat >/tmp/new_phpfpm_pool.conf <<EOF
 [${USERNAME}]
 user = ${USERNAME}
-group = nginx
-listen.owner = nginx
-listen.group = nginx
+group = www-data
+listen.owner = www-data
+listen.group = www-data
 listen = /run/php/php7.3-fpm.${USERNAME}.sock
+
 pm = dynamic
-pm.max_children = 5
+pm.max_children = 10
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3
 pm.process_idle_timeout = 30s
 pm.max_requests = 1024
-request_terminate_timeout = 300s
+request_terminate_timeout = 120s
+
+catch_workers_output = yes
+php_flag[display_errors] = off
+php_admin_value[error_log] = /var/log/fpm-php.${USERNAME}.log
+php_admin_flag[log_errors] = on
 EOF
 
 sudo mv /tmp/new_phpfpm_pool.conf /etc/php/7.3/fpm/pool.d/$USERNAME.conf

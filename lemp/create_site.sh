@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -z "$3" ]
 then
     echo "Please try again with full arguments : [username] [domain] [email for letencrypt] [webroot?]"
@@ -65,7 +67,6 @@ server {
         location ~ \\.php\$ {
                 include fastcgi_snippets;
                 fastcgi_pass unix:/run/php/php7.3-fpm.${USERNAME}.sock;
-                fastcgi_read_timeout 60;
         }
         
         location ~ /\\.  {
@@ -75,10 +76,11 @@ server {
 EOF
 sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
-sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --http --http.webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf && sudo systemctl reload nginx.service
-sudo touch /etc/cron.d/letencrypt
-DOM=$(( $RANDOM % 28 + 1 ))
-echo "0 0 $DOM * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --http --http.webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee -a /etc/cron.d/letencrypt
+sudo /usr/local/bin/lego -a --path /var/lego --email $email --domains $domain --http --http.webroot="/usr/share/nginx/acme-challenge" run
+sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf
+sudo systemctl reload nginx.service
+
+echo "$DOMAIN|$LE_EMAIL" >> ~/.renew_domains
 
 if [ $# -eq 5 ]
 then
