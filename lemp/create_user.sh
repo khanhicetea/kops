@@ -43,7 +43,7 @@ user = ${USERNAME}
 group = www-data
 listen.owner = www-data
 listen.group = www-data
-listen = /run/php/php7.3-fpm.${USERNAME}.sock
+listen = /var/run/php/php7.3-fpm.${USERNAME}.sock
 
 pm = dynamic
 pm.max_children = 10
