@@ -188,6 +188,7 @@ sudo apt install mysql-server mysql-client -y
 sudo systemctl enable mysql.service
 sudo systemctl restart mysql.service
 echo -e "[client]\nuser=root\npassword=passwd" > ~/.my.cnf
+chmod 600 ~/.my.cnf
 
 # Redis server
 sudo add-apt-repository ppa:chris-lea/redis-server -y
