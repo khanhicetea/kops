@@ -17,7 +17,7 @@ if [ ! -d "/home/$USERNAME" ]; then
     ./create_user.sh $USERNAME
 fi
 
-sudo mkdir /home/$USERNAME/$DOMAIN
+sudo mkdir -p /home/$USERNAME/$DOMAIN
 sudo chown -R $USERNAME:www-data /home/$USERNAME/$DOMAIN
 sudo openssl req -new -x509 -nodes -days 3650 -newkey rsa:2048 -subj "/C=US/ST=Nil/L=Nil/O=Nil/CN=$DOMAIN" -keyout /etc/nginx/ssl/$DOMAIN.key -out /etc/nginx/ssl/$DOMAIN.crt
 cat >/tmp/new_nginx_site.conf <<EOF
