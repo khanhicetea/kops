@@ -77,7 +77,7 @@ prefs:
     logPath: jobber-log
     runLog:
         type: file
-        path: /tmp/jobber-root.log
+        path: /tmp/jobber-root.run.log
         maxFileLen: 50m
         maxHistories: 2
 
@@ -170,6 +170,7 @@ include fastcgi.conf;
 EOF
 sudo mv /tmp/nginx_fastcgi_snipets /etc/nginx/fastcgi_snippets
 
+openssl rand 2048 > ~/.rnd
 sudo mkdir /etc/nginx/ssl
 sudo mkdir /etc/nginx/certs
 sudo mkdir /usr/share/nginx/acme-challenge
