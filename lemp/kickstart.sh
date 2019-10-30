@@ -41,16 +41,6 @@ echo "vm.dirty_background_ratio = 10" | sudo tee -a /etc/sysctl.conf
 
 sudo sysctl -p
 
-# Firewall
-sudo sed -i -e 's/IPV6=yes/IPV6=no/' /etc/default/ufw
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow 22/tcp
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw limit OpenSSH
-sudo ufw --force enable
-
 # SSH disable password authentication (make sure you configured authorized keys)
 test -f ~/.ssh/authorized_keys && sudo sed -i -e 's/.*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo systemctl restart ssh
 
@@ -61,10 +51,20 @@ sudo apt list --upgradable
 sudo apt upgrade -y
 
 # Install tools
-sudo apt install git screen vim curl zip unzip software-properties-common -y
+sudo apt install ufw wget git screen vim curl zip unzip software-properties-common -y
 wget https://github.com/xenolf/lego/releases/download/v3.1.0/lego_v3.1.0_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.1.0_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.1.0_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
+
+# Firewall
+sudo sed -i -e 's/IPV6=yes/IPV6=no/' /etc/default/ufw
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw limit OpenSSH
+sudo ufw --force enable
 
 # Install Jobber
 wget https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && sudo dpkg -i jobber_1.4.0-1_amd64.deb && rm -f jobber_1.4.0-1_amd64.deb
