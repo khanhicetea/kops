@@ -18,7 +18,7 @@ if [ ! -d "/home/$USERNAME" ]; then
 fi
 
 sudo mkdir /home/$USERNAME/$DOMAIN
-sudo chown -R $USERNAME:nginx /home/$USERNAME/$DOMAIN
+sudo chown -R $USERNAME:www-data /home/$USERNAME/$DOMAIN
 sudo openssl req -new -x509 -nodes -days 3650 -newkey rsa:2048 -subj "/C=US/ST=Nil/L=Nil/O=Nil/CN=$DOMAIN" -keyout /etc/nginx/ssl/$DOMAIN.key -out /etc/nginx/ssl/$DOMAIN.crt
 cat >/tmp/new_nginx_site.conf <<EOF
 server {
@@ -76,7 +76,7 @@ server {
 EOF
 sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
-sudo /usr/local/bin/lego -a --path /var/lego --email $email --domains $domain --http --http.webroot="/usr/share/nginx/acme-challenge" run
+sudo /usr/local/bin/lego -a -k rsa2048 --path /var/lego --email $email --domains $domain --http --http.webroot="/usr/share/nginx/acme-challenge" run
 sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
 

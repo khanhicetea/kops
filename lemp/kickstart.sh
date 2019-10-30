@@ -61,7 +61,7 @@ sudo apt list --upgradable
 sudo apt upgrade -y
 
 # Install tools
-sudo apt install git screen vim curl software-properties-common -y
+sudo apt install git screen vim curl zip unzip software-properties-common -y
 wget https://github.com/xenolf/lego/releases/download/v3.1.0/lego_v3.1.0_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.1.0_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.1.0_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
@@ -217,6 +217,8 @@ sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /
 sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=20/" /etc/php/7.3/fpm/php.ini
 sudo systemctl enable php7.3-fpm.service
 sudo systemctl restart php7.3-fpm.service
+
+sudo chown -R $USER:$USER ~/.config
 curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php
 
 rm -rf /tmp/lemp
