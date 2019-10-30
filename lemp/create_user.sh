@@ -9,8 +9,8 @@ sudo useradd -m -N -g www-data $USERNAME
 sudo chsh -s /bin/bash $USERNAME
 echo "umask 027" | sudo tee -a /home/$USERNAME/.bashrc
 
-mkdir /home/$USERNAME/logs
-chmod 775 /home/$USERNAME/logs
+sudo runuser -l $USERNAME -c "mkdir /home/$USERNAME/logs"
+sudo runuser -l $USERNAME -c "chmod 775 /home/$USERNAME/logs"
 
 # Jobber
 sudo systemctl restart jobber
