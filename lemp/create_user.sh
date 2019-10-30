@@ -9,6 +9,30 @@ sudo useradd -m -N -g www-data $USERNAME
 sudo chsh -s /bin/bash $USERNAME
 echo "umask 027" | sudo tee -a /home/$USERNAME/.bashrc
 
+mkdir /home/$USERNAME/logs
+chmod 775 /home/$USERNAME/logs
+
+# Jobber
+sudo systemctl restart jobber
+sudo runuser -l $USERNAME -c 'jobber init'
+cat >/tmp/user_jobber <<EOF
+version: 1.4
+
+prefs:
+    logPath: logs/jobber.main.log
+    runLog:
+        type: file
+        path: /home/${USERNAME}/logs/jobber.run.log
+        maxFileLen: 50m
+        maxHistories: 2
+
+jobs:
+EOF
+sudo mv /tmp/user_jobber /home/$USERNAME/.jobber
+sudo chown -R $USERNAME:www-data /home/$USERNAME/.jobber
+sudo chmod 600 /home/$USERNAME/.jobber
+sudo runuser -l $USERNAME -c 'jobber reload'
+
 # Composer install plugins
 sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
 
@@ -30,9 +54,8 @@ pm.process_idle_timeout = 30s
 pm.max_requests = 1024
 request_terminate_timeout = 120s
 
-catch_workers_output = yes
 php_flag[display_errors] = off
-php_admin_value[error_log] = /var/log/fpm-php.${USERNAME}.log
+php_admin_value[error_log] = /home/${USERNAME}/logs/fpm-php.error.log
 php_admin_flag[log_errors] = on
 EOF
 
