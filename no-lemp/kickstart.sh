@@ -61,10 +61,33 @@ sudo apt list --upgradable
 sudo apt upgrade -y
 
 # Install tools
-sudo apt install git screen vim curl software-properties-common -y
-wget https://github.com/xenolf/lego/releases/download/v3.1.0/lego_v3.1.0_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.1.0_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.1.0_linux_amd64.tar.gz && rm -rf lego_linux
+sudo apt install ufw wget git screen vim curl zip unzip software-properties-common -y
+wget https://github.com/xenolf/lego/releases/download/v3.5.0/lego_v3.5.0_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.5.0_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.5.0_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
+
+# Install Jobber
+wget https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && sudo dpkg -i jobber_1.4.0-1_amd64.deb && rm -f jobber_1.4.0-1_amd64.deb
+sudo systemctl enable jobber.service
+jobber init
+cat >~/.jobber <<EOF
+version: 1.4
+
+prefs:
+    logPath: jobber-log
+    runLog:
+        type: file
+        path: /tmp/jobber-root.run.log
+        maxFileLen: 50m
+        maxHistories: 2
+
+jobs:
+    RenewCerts:
+        cmd: ~/kops/scripts/renew_certs.sh
+        time: '0 0 0 * * *'
+        onError: Continue
+EOF
+jobber reload
 
 # NGINX (mainline branch)
 echo "deb http://nginx.org/packages/mainline/ubuntu/ bionic nginx" | sudo tee -a /etc/apt/sources.list
@@ -133,7 +156,7 @@ gzip_types text/plain text/css application/json application/x-javascript text/xm
 EOF
 sudo mv /tmp/nginx_conf /etc/nginx/conf.d/nginx.conf
 
-sudo mkdir /var/lego
+openssl rand 2048 > ~/.rnd
 sudo mkdir /etc/nginx/ssl
 sudo mkdir /etc/nginx/certs
 sudo mkdir /usr/share/nginx/acme-challenge

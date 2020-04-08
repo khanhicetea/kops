@@ -43,7 +43,7 @@ server {
         ssl_certificate /etc/nginx/ssl/${DOMAIN}.crt;
         ssl_certificate_key /etc/nginx/ssl/${DOMAIN}.key;
         ssl_session_timeout 60m;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_protocols TLSv1.1 TLSv1.2;
         ssl_ciphers 'ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DHE+AES128:!ADH:!AECDH:!MD5';
         ssl_session_cache shared:SSL:30m;
         ssl_prefer_server_ciphers on;

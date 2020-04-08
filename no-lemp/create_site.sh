@@ -36,14 +36,14 @@ server {
         listen 443 ssl http2;
         server_name ${DOMAIN};
         root /home/${USERNAME}/${DOMAIN}/${DOC_ROOT};
-        index index.php index.html index.htm;
+        index index.html index.htm;
 
         ssl_certificate /etc/nginx/ssl/${DOMAIN}.crt;
         ssl_certificate_key /etc/nginx/ssl/${DOMAIN}.key;
-        ssl_session_timeout 5m;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_ciphers 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS';
-        ssl_session_cache shared:SSL:50m;
+        ssl_session_timeout 60m;
+        ssl_protocols TLSv1.1 TLSv1.2;
+        ssl_ciphers 'ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DHE+AES128:!ADH:!AECDH:!MD5';
+        ssl_session_cache shared:SSL:30m;
         ssl_prefer_server_ciphers on;
         ssl_dhparam /etc/nginx/certs/dhparam.pem;
         add_header Strict-Transport-Security "max-age=31536000";
@@ -65,10 +65,11 @@ server {
 EOF
 sudo mv /tmp/new_nginx_site.conf /etc/nginx/conf.d/$DOMAIN.conf
 sudo systemctl reload nginx.service
-sudo /usr/local/bin/lego --accept-tos --email="$LE_EMAIL" --path "/var/lego" --domains="$DOMAIN" --http --http.webroot="/usr/share/nginx/acme-challenge" run && sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf && sudo systemctl reload nginx.service
-sudo touch /etc/cron.d/letencrypt
-DOM=$(( $RANDOM % 28 + 1 ))
-echo "0 0 $DOM * * root /usr/local/bin/lego --accept-tos --email=$LE_EMAIL --path /var/lego --domains=$DOMAIN --http --http.webroot=/usr/share/nginx/acme-challenge renew && /bin/systemctl reload nginx.service" | sudo tee -a /etc/cron.d/letencrypt
+sudo /usr/local/bin/lego -a -k rsa2048 --path /var/lego --email $LE_EMAIL --domains $DOMAIN --http --http.webroot="/usr/share/nginx/acme-challenge" run
+sudo sed -i 's/\/etc\/nginx\/ssl/\/var\/lego\/certificates/' /etc/nginx/conf.d/$DOMAIN.conf
+sudo systemctl reload nginx.service
+
+echo "$DOMAIN|$LE_EMAIL" >> ~/.renew_domains
 
 # Done
 echo -e "\nDone ! Enjoy it !"
