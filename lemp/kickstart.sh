@@ -182,8 +182,9 @@ sudo systemctl restart nginx.service
 
 # MySQL 5.7
 export DEBIAN_FRONTEND=noninteractive
-echo "mysql-server-5.7 mysql-server/root_password password passwd" | sudo debconf-set-selections
-echo "mysql-server-5.7 mysql-server/root_password_again password passwd" | sudo debconf-set-selections
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.15-1_all.deb
+
 sudo apt install mysql-server mysql-client -y
 sudo systemctl enable mysql.service
 sudo systemctl restart mysql.service
@@ -202,23 +203,23 @@ sudo apt install -y nodejs
 sudo npm install -g yarn
 sudo npm install -g pm2
 
-# PHP 7.3 (via PPA)
+# PHP 7.4 (via PPA)
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install -y php7.3-bz2 php7.3-cli php7.3-common php7.3-curl php7.3-fpm php7.3-gd php7.3-intl php7.3-json php7.3-mbstring php7.3-mysql php7.3-opcache php7.3-readline php7.3-xml php7.3-xmlrpc php7.3-xsl php7.3-zip php-redis
-sudo sed -i "s/;date.timezone =.*/date.timezone = Asia\/Ho_Chi_Minh/" /etc/php/7.3/cli/php.ini
-sudo sed -i "s/;date.timezone =.*/date.timezone = Asia\/Ho_Chi_Minh/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/; max_input_vars =.*/max_input_vars = 10000/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.3/fpm/php.ini
-sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=20/" /etc/php/7.3/fpm/php.ini
-sudo systemctl enable php7.3-fpm.service
-sudo systemctl restart php7.3-fpm.service
+sudo apt install -y php7.4-bz2 php7.4-cli php7.4-common php7.4-curl php7.4-fpm php7.4-gd php7.4-intl php7.4-json php7.4-mbstring php7.4-mysql php7.4-opcache php7.4-readline php7.4-xml php7.4-xmlrpc php7.4-xsl php7.4-zip php-redis
+sudo sed -i "s/;date.timezone =.*/date.timezone = Asia\/Ho_Chi_Minh/" /etc/php/7.4/cli/php.ini
+sudo sed -i "s/;date.timezone =.*/date.timezone = Asia\/Ho_Chi_Minh/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/; max_input_vars =.*/max_input_vars = 10000/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 10M/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/post_max_size = .*/post_max_size = 12M/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 60/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/;opcache.enable=.*/opcache.enable=1/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/;opcache.use_cwd=.*/opcache.use_cwd=1/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/" /etc/php/7.4/fpm/php.ini
+sudo sed -i "s/;opcache.revalidate_freq=.*/;opcache.revalidate_freq=20/" /etc/php/7.4/fpm/php.ini
+sudo systemctl enable php7.4-fpm.service
+sudo systemctl restart php7.4-fpm.service
 
 sudo chown -R $USER:$USER ~/.config
 curl https://getcomposer.org/installer > composer-setup.php && php composer-setup.php && sudo mv composer.phar /usr/local/bin/composer && sudo chmod +x /usr/local/bin/composer && rm composer-setup.php

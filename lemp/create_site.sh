@@ -66,7 +66,7 @@ server {
 
         location ~ \\.php\$ {
                 include fastcgi_snippets;
-                fastcgi_pass unix:/var/run/php/php7.3-fpm.${USERNAME}.sock;
+                fastcgi_pass unix:/var/run/php/php7.4-fpm.${USERNAME}.sock;
         }
         
         location ~ /\\.  {

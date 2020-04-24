@@ -44,7 +44,7 @@ user = ${USERNAME}
 group = www-data
 listen.owner = www-data
 listen.group = www-data
-listen = /var/run/php/php7.3-fpm.${USERNAME}.sock
+listen = /var/run/php/php7.4-fpm.${USERNAME}.sock
 
 pm = dynamic
 pm.max_children = 10
@@ -60,11 +60,11 @@ php_admin_value[error_log] = /home/${USERNAME}/logs/fpm-php.error.log
 php_admin_flag[log_errors] = on
 EOF
 
-sudo mv /tmp/new_phpfpm_pool.conf /etc/php/7.3/fpm/pool.d/$USERNAME.conf
-sudo rm -f /etc/php/7.3/fpm/pool.d/www.conf
+sudo mv /tmp/new_phpfpm_pool.conf /etc/php/7.4/fpm/pool.d/$USERNAME.conf
+sudo rm -f /etc/php/7.4/fpm/pool.d/www.conf
 
 # Reload php-fpm service
-sudo systemctl reload php7.3-fpm.service
+sudo systemctl reload php7.4-fpm.service
 
 # Create MySQL user
 RANDOM_PASS=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16 ; echo ''`
