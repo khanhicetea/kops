@@ -51,7 +51,7 @@ sudo apt list --upgradable
 sudo apt upgrade -y
 
 # Install tools
-sudo apt install ufw wget git screen vim curl zip unzip software-properties-common -y
+sudo apt install ufw wget git screen vim curl zip unzip software-properties-common gnupg -y
 wget https://github.com/xenolf/lego/releases/download/v3.5.0/lego_v3.5.0_linux_amd64.tar.gz && mkdir lego_linux && tar xf lego_v3.5.0_linux_amd64.tar.gz -C lego_linux && chmod +x lego_linux/lego && sudo mv lego_linux/lego /usr/local/bin/lego && rm -f lego_v3.5.0_linux_amd64.tar.gz && rm -rf lego_linux
 echo "hardstatus alwayslastline" | sudo tee -a /etc/screenrc
 echo "hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'" | sudo tee -a /etc/screenrc
@@ -184,6 +184,7 @@ sudo systemctl restart nginx.service
 export DEBIAN_FRONTEND=noninteractive
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
 sudo dpkg -i mysql-apt-config_0.8.15-1_all.deb
+sudo apt update
 
 sudo apt install mysql-server mysql-client -y
 sudo systemctl enable mysql.service
