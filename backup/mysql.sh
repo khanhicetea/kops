@@ -22,7 +22,7 @@ FILENAME=$HOSTIP.$TODAY.sql.gz
 RM_FILENAME=$HOSTIP.$RM_DAY.sql.gz
 
 echo "Backup database in $TODAY ...."
-mysqldump --opt --routines --compact --force --databases ${BACKUP_DBS} | gzip > $BACKUP_DIR/$FILENAME
+mysqldump --skip-tz-utc --opt --routines --force --databases ${BACKUP_DBS} | gzip > $BACKUP_DIR/$FILENAME
 
 echo "Uploading to Dropbox ...."
 /bin/bash $CWD/dropbox_uploader.sh upload "/$BACKUP_DIR/${FILENAME}" "${FILENAME}"
