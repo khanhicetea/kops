@@ -2,6 +2,8 @@
 # <UDF name="USERNAME" Label="Linux username" />
 # <UDF name="GH_USERNAME" Label="Your github username, to get public keys" />
 
+USERNAME="khanhicetea"
+GH_USERNAME="khanhicetea"
 GITHUBKEYS="https://github.com/$GH_USERNAME.keys"
 
 # Install packages
