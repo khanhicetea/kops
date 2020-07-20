@@ -90,7 +90,6 @@ EOF
 jobber reload
 
 # NGINX (mainline branch)
-sudo add-apt-repository ppa:nginx/stable -y
 sudo apt install nginx -y
 
 cat >/tmp/nginx_conf <<EOF
@@ -180,7 +179,7 @@ sudo openssl dhparam -dsaparam -out /etc/nginx/certs/dhparam.pem 2048
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
-# MySQL 5.7
+# MySQL 8
 export DEBIAN_FRONTEND=noninteractive
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
 sudo dpkg -i mysql-apt-config_0.8.15-1_all.deb
@@ -193,7 +192,6 @@ echo -e "[client]\nuser=root\npassword=passwd" > ~/.my.cnf
 chmod 600 ~/.my.cnf
 
 # Redis server
-sudo add-apt-repository ppa:chris-lea/redis-server -y
 sudo apt install redis-server -y
 sudo systemctl enable redis-server.service
 sudo systemctl restart redis-server.service
