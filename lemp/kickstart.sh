@@ -179,7 +179,7 @@ sudo openssl dhparam -dsaparam -out /etc/nginx/certs/dhparam.pem 2048
 sudo systemctl enable nginx.service
 sudo systemctl restart nginx.service
 
-# MySQL 8
+# MySQL 8, remove 4 lines below for using MySQL 5
 export DEBIAN_FRONTEND=noninteractive
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
 sudo dpkg -i mysql-apt-config_0.8.15-1_all.deb
