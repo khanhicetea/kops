@@ -14,6 +14,8 @@ Run init script
 - Run it
 
 ```bash
+cd kops
+nano scripts/linode-stack.sh
 bash scripts/linode-stack.sh
 ```
 
@@ -23,7 +25,10 @@ Run kickstart
 
 ```bash
 bash lemp/kickstart.sh
+exit
 ```
+
+When being asked about MySQL Password , using default password is `passwd`
 
 ## USING LEMP (LINUX + NginX + MySQL + PHP)
 
