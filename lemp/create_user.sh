@@ -35,7 +35,7 @@ sudo chmod 600 /home/$USERNAME/.jobber
 sudo runuser -l $USERNAME -c 'jobber reload'
 
 # Composer install plugins
-sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
+# sudo runuser -l $USERNAME -c 'composer global require "hirak/prestissimo:^0.3"'
 
 # Create user php-fpm pool
 cat >/tmp/new_phpfpm_pool.conf <<EOF
